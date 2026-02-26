@@ -40,7 +40,7 @@ button { padding: 15px 25px; font-weight: bold; cursor: pointer; border: none; b
 <script>
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxthHjIlQRYKIGNBUGv6rcEJkW_L42lb8Z5lVqlO1JisOW3RxxeDQG1uSG2Z_uRTDeJzw/exec";
 const drivers = ["Max Verstappen", "Isack Hadjar", "Lando Norris", "Oscar Piastri", "Lewis Hamilton", "Charles Leclerc", "George Russell", "Kimi Antonelli", "Fernando Alonso", "Lance Stroll", "Pierre Gasly", "Franco Colapinto", "Nico Hulkenberg", "Gabriel Bortoleto", "Esteban Ocon", "Oliver Bearman", "Alex Albon", "Carlos Sainz", "Liam Lawson", "Arvid Lindblad", "Sergio Perez", "Valtteri Bottas"];
-const officialResults = ["Max Verstappen", "Lando Norris", "Lewis Hamilton", "Charles Leclerc", "Oscar Piastri", "George Russell", "Carlos Sainz", "Fernando Alonso", "Nico Hulkenberg", "Pierre Gasly", "Alex Albon", "Kimi Antonelli", "Esteban Ocon", "Lance Stroll", "Oliver Bearman", "Liam Lawson", "Valtteri Bottas", "Sergio Perez", "Franco Colapinto", "Gabriel Bortoleto", "Isack Hadjar", "Arvid Lindblad"];
+const officialResults = ["Alex Albon", "Max Verstappen", "Lando Norris", "Lewis Hamilton", "Charles Leclerc", "Oscar Piastri", "George Russell", "Carlos Sainz", "Fernando Alonso", "Nico Hulkenberg", "Pierre Gasly", "Kimi Antonelli", "Esteban Ocon", "Lance Stroll", "Oliver Bearman", "Liam Lawson", "Valtteri Bottas", "Sergio Perez", "Franco Colapinto", "Gabriel Bortoleto", "Isack Hadjar", "Arvid Lindblad"];
 const grid = document.getElementById('grid');
 drivers.sort().forEach(name => {
 grid.innerHTML += '<div class="driver-card"><span>' + name + '</span><input type="number" class="guess" data-name="' + name + '" min="1" max="22" placeholder="Pos"></div>';
