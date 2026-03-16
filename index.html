@@ -5,24 +5,21 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>F1 2026 Predictor Pro</title>
 <style>
-body { background-color: #15151e; color: white; font-family: 'Titillium Web', sans-serif; text-align: center; padding: 20px; }
+body { background-color: #15151e; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
 .container { max-width: 900px; margin: auto; }
-h1 { color: #e10600; text-transform: uppercase; letter-spacing: 3px; font-weight: 900; }
+h1 { color: #e10600; text-transform: uppercase; letter-spacing: 3px; }
 .setup-section { margin-bottom: 20px; padding: 15px; background: #1f1f27; border-radius: 8px; border: 1px solid #38383f; }
-#player-name { width: 280px; padding: 12px; border-radius: 4px; border: 1px solid #444; background: #000; color: #fff; font-size: 1.1rem; outnone; }
-#player-name:focus { border-color: #e10600; }
+#player-name { width: 280px; padding: 12px; border-radius: 4px; border: 1px solid #444; background: #000; color: #fff; font-size: 1.1rem; }
 .driver-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; margin: 25px 0; }
-.driver-card { background: #1f1f27; padding: 10px 15px; display: flex; align-items: center; border-radius: 6px; border-right: 4px solid #38383f; transition: 0.2s; }
-.driver-card:hover { background: #2b2b35; transform: scale(1.02); }
-.team-logo { width: 40px; height: 40px; object-fit: contain; margin-right: 15px; filter: drop-shadow(0px 0px 2px rgba(255,255,255,0.2)); }
-.driver-info { flex-grow: 1; text-align: left; font-weight: bold; font-size: 1rem; }
-input[type="number"] { width: 55px; padding: 10px; text-align: center; border-radius: 4px; border: 1px solid #444; background: #000; color: #fff; font-weight: bold; font-size: 1rem; }
+.driver-card { background: #1f1f27; padding: 10px 15px; display: flex; align-items: center; border-radius: 6px; border-right: 4px solid #38383f; }
+.team-logo { width: 40px; height: 40px; object-fit: contain; margin-right: 15px; }
+.driver-info { flex-grow: 1; text-align: left; font-weight: bold; }
+input[type="number"] { width: 55px; padding: 10px; text-align: center; border-radius: 4px; border: 1px solid #444; background: #000; color: #fff; }
 .btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
-button { padding: 15px 30px; font-weight: bold; cursor: pointer; border: none; border-radius: 4px; color: white; text-transform: uppercase; letter-spacing: 1px; }
-#submit-btn { background: #e10600; box-shadow: 0 4px #990400; }
-#submit-btn:active { box-shadow: 0 0px; transform: translateY(4px); }
+button { padding: 15px 30px; font-weight: bold; cursor: pointer; border: none; border-radius: 4px; color: white; text-transform: uppercase; }
+#submit-btn { background: #e10600; }
 #reset-btn { background: #38383f; }
-#status-msg { margin-top: 25px; font-weight: bold; font-size: 1.2rem; }
+#status-msg { margin-top: 25px; font-weight: bold; }
 </style>
 </head>
 <body>
@@ -41,32 +38,35 @@ button { padding: 15px 30px; font-weight: bold; cursor: pointer; border: none; b
 <script>
 const WEB_APP_URL = " https://script.google.com/macros/s/AKfycbzw1nk2ReiQgAULmV5dNRHgsnUrzE_k4zjQWFcRekpuWnSY0wQOJ6LRUMPZuMPyOy3RcA/exec";
 const driverData = [
-{ name: "Max Verstappen", team: "Red Bull", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Red_Bull_Racing_logo.svg" },
-{ name: "Isack Hadjar", team: "Red Bull", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Red_Bull_Racing_logo.svg" },
-{ name: "Lando Norris", team: "McLaren", logo: "https://upload.wikimedia.org/wikipedia/en/6/66/McLaren_Racing_logo.svg" },
-{ name: "Oscar Piastri", team: "McLaren", logo: "https://upload.wikimedia.org/wikipedia/en/6/66/McLaren_Racing_logo.svg" },
-{ name: "Lewis Hamilton", team: "Ferrari", logo: "https://upload.wikimedia.org/wikipedia/en/d/d1/Ferrari-Logo.svg" },
-{ name: "Charles Leclerc", team: "Ferrari", logo: "https://upload.wikimedia.org/wikipedia/en/d/d1/Ferrari-Logo.svg" },
-{ name: "George Russell", team: "Mercedes", logo: "https://upload.wikimedia.org/wikipedia/commons/f/fb/Mercedes-AMG_Petronas_F1_Team_Logo.svg" },
-{ name: "Kimi Antonelli", team: "Mercedes", logo: "https://upload.wikimedia.org/wikipedia/commons/f/fb/Mercedes-AMG_Petronas_F1_Team_Logo.svg" },
-{ name: "Fernando Alonso", team: "Aston Martin", logo: "https://upload.wikimedia.org/wikipedia/en/d/d4/Aston_Martin_F1_team_logo.svg" },
-{ name: "Lance Stroll", team: "Aston Martin", logo: "https://upload.wikimedia.org/wikipedia/en/d/d4/Aston_Martin_F1_team_logo.svg" },
-{ name: "Pierre Gasly", team: "Alpine", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Alpine_F1_Team_Logo.svg" },
-{ name: "Franco Colapinto", team: "Alpine", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Alpine_F1_Team_Logo.svg" },
-{ name: "Nico Hulkenberg", team: "Audi", logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" },
-{ name: "Gabriel Bortoleto", team: "Audi", logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" },
-{ name: "Esteban Ocon", team: "Haas", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Haas_F1_Team_logo.svg" },
-{ name: "Oliver Bearman", team: "Haas", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Haas_F1_Team_logo.svg" },
-{ name: "Alex Albon", team: "Williams", logo: "https://upload.wikimedia.org/wikipedia/en/e/e0/Williams_F1_logo.svg" },
-{ name: "Carlos Sainz", team: "Williams", logo: "https://upload.wikimedia.org/wikipedia/en/e/e0/Williams_F1_logo.svg" },
-{ name: "Liam Lawson", team: "Racing Bulls", logo: "https://upload.wikimedia.org/wikipedia/en/8/81/VCARB_F1_logo.svg" },
-{ name: "Arvid Lindblad", team: "Racing Bulls", logo: "https://upload.wikimedia.org/wikipedia/en/8/81/VCARB_F1_logo.svg" },
-{ name: "Sergio Perez", team: "Cadillac", logo: "https://upload.wikimedia.org/wikipedia/commons/3/30/Cadillac_logo.svg" },
-{ name: "Valtteri Bottas", team: "Cadillac", logo: "https://upload.wikimedia.org/wikipedia/commons/3/30/Cadillac_logo.svg" }
+{ name: "Max Verstappen", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Red_Bull_Racing_logo.svg" },
+{ name: "Isack Hadjar", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Red_Bull_Racing_logo.svg" },
+{ name: "Lando Norris", logo: "https://upload.wikimedia.org/wikipedia/en/6/66/McLaren_Racing_logo.svg" },
+{ name: "Oscar Piastri", logo: "https://upload.wikimedia.org/wikipedia/en/6/66/McLaren_Racing_logo.svg" },
+{ name: "Lewis Hamilton", logo: "https://upload.wikimedia.org/wikipedia/en/d/d1/Ferrari-Logo.svg" },
+{ name: "Charles Leclerc", logo: "https://upload.wikimedia.org/wikipedia/en/d/d1/Ferrari-Logo.svg" },
+{ name: "George Russell", logo: "https://upload.wikimedia.org/wikipedia/commons/f/fb/Mercedes-AMG_Petronas_F1_Team_Logo.svg" },
+{ name: "Kimi Antonelli", logo: "https://upload.wikimedia.org/wikipedia/commons/f/fb/Mercedes-AMG_Petronas_F1_Team_Logo.svg" },
+{ name: "Fernando Alonso", logo: "https://upload.wikimedia.org/wikipedia/en/d/d4/Aston_Martin_F1_team_logo.svg" },
+{ name: "Lance Stroll", logo: "https://upload.wikimedia.org/wikipedia/en/d/d4/Aston_Martin_F1_team_logo.svg" },
+{ name: "Pierre Gasly", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Alpine_F1_Team_Logo.svg" },
+{ name: "Franco Colapinto", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Alpine_F1_Team_Logo.svg" },
+{ name: "Nico Hulkenberg", logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" },
+{ name: "Gabriel Bortoleto", logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" },
+{ name: "Esteban Ocon", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Haas_F1_Team_logo.svg" },
+{ name: "Oliver Bearman", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Haas_F1_Team_logo.svg" },
+{ name: "Alex Albon", logo: "https://upload.wikimedia.org/wikipedia/en/e/e0/Williams_F1_logo.svg" },
+{ name: "Carlos Sainz", logo: "https://upload.wikimedia.org/wikipedia/en/e/e0/Williams_F1_logo.svg" },
+{ name: "Liam Lawson", logo: "https://upload.wikimedia.org/wikipedia/en/8/81/VCARB_F1_logo.svg" },
+{ name: "Arvid Lindblad", logo: "https://upload.wikimedia.org/wikipedia/en/8/81/VCARB_F1_logo.svg" },
+{ name: "Sergio Perez", logo: "https://upload.wikimedia.org/wikipedia/commons/3/30/Cadillac_logo.svg" },
+{ name: "Valtteri Bottas", logo: "https://upload.wikimedia.org/wikipedia/commons/3/30/Cadillac_logo.svg" }
 ];
 const grid = document.getElementById('grid');
 driverData.sort((a, b) => a.name.localeCompare(b.name)).forEach(d => {
-  grid.innerHTML += <div class="driver-card">     <img src="${d.logo}" class="team-logo">     <div class="driver-info">${d.name}</div>     <input type="number" class="guess" data-name="${d.name}" min="1" max="22" placeholder="Pos" onchange="checkDuplicate(this)">   </div>;
+  const card = document.createElement('div');
+  card.className = 'driver-card';
+  card.innerHTML = '<img src="' + d.logo + '" class="team-logo"><div class="driver-info">' + d.name + '</div><input type="number" class="guess" data-name="' + d.name + '" min="1" max="22" placeholder="Pos" onchange="checkDuplicate(this)">';
+  grid.appendChild(card);
 });
 function checkDuplicate(input) {
   const val = input.value;
