@@ -3,105 +3,94 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>F1 2026 Prediction Game</title>
+<title>F1 2026 Predictions</title>
 <style>
   body { background-color: #ffffff; color: #15151e; font-family: sans-serif; text-align: center; padding: 20px; }
-  .container { max-width: 900px; margin: auto; }
+  .container { max-width: 800px; margin: auto; }
   h1 { color: #e10600; text-transform: uppercase; font-weight: 900; }
-  .setup-section { margin-bottom: 25px; padding: 20px; background: #f4f4f4; border-radius: 12px; border: 1px solid #ddd; }
-  #player-name { width: 280px; padding: 12px; border-radius: 6px; border: 2px solid #ccc; font-size: 1.1rem; text-align: center; }
-  .driver-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 10px; margin: 20px 0; }
-  .driver-card { background: #f9f9f9; padding: 10px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #eee; }
-  .team-logo { width: 40px; height: 40px; margin-right: 15px; border-radius: 4px; }
-  .driver-info { flex-grow: 1; text-align: left; font-weight: bold; font-size: 1rem; }
+  .setup-section { margin-bottom: 20px; padding: 15px; background: #f4f4f4; border-radius: 8px; border: 1px solid #ddd; }
+  #player-name { width: 250px; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 1rem; }
+  .driver-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; margin: 20px 0; }
+  .driver-card { background: #f9f9f9; padding: 12px; display: flex; align-items: center; border-radius: 6px; border: 1px solid #eee; }
+  .team-dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 15px; flex-shrink: 0; }
+  .driver-info { flex-grow: 1; text-align: left; font-weight: bold; }
   input[type="number"] { width: 50px; padding: 8px; text-align: center; border-radius: 4px; border: 1px solid #ccc; }
-  .btn-group { margin-top: 30px; display: flex; justify-content: center; gap: 20px; }
-  button { padding: 15px 30px; font-weight: bold; cursor: pointer; border-radius: 8px; border: none; color: white; text-transform: uppercase; }
+  .btn-group { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
+  button { padding: 15px 30px; font-weight: bold; cursor: pointer; border-radius: 4px; border: none; color: white; text-transform: uppercase; }
   #submit-btn { background: #e10600; }
   #reset-btn { background: #333; }
+  #status-msg { margin-top: 20px; font-weight: bold; }
 </style>
 </head>
 <body>
 <div class="container">
   <h1>F1 2026 Season Predictor</h1>
-  <div class="setup-section"><input type="text" id="player-name" placeholder="YOUR NAME"></div>
-
-  <div class="driver-list">
-
-        <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/red_bull.png" class="team-logo"> <div class="driver-info">Max Verstappen</div> <input type="number" class="guess" data-name="Max Verstappen"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/red_bull.png" class="team-logo"> <div class="driver-info">Isack Hadjar</div> <input type="number" class="guess" data-name="Isack Hadjar"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/mclaren.png" class="team-logo"> <div class="driver-info">Lando Norris</div> <input type="number" class="guess" data-name="Lando Norris"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/mclaren.png" class="team-logo"> <div class="driver-info">Oscar Piastri</div> <input type="number" class="guess" data-name="Oscar Piastri"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/ferrari.png" class="team-logo"> <div class="driver-info">Lewis Hamilton</div> <input type="number" class="guess" data-name="Lewis Hamilton"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/ferrari.png" class="team-logo"> <div class="driver-info">Charles Leclerc</div> <input type="number" class="guess" data-name="Charles Leclerc"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/mercedes.png" class="team-logo"> <div class="driver-info">George Russell</div> <input type="number" class="guess" data-name="George Russell"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/mercedes.png" class="team-logo"> <div class="driver-info">Kimi Antonelli</div> <input type="number" class="guess" data-name="Kimi Antonelli"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/aston_martin.png" class="team-logo"> <div class="driver-info">Fernando Alonso</div> <input type="number" class="guess" data-name="Fernando Alonso"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/aston_martin.png" class="team-logo"> <div class="driver-info">Lance Stroll</div> <input type="number" class="guess" data-name="Lance Stroll"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/alpine.png" class="team-logo"> <div class="driver-info">Pierre Gasly</div> <input type="number" class="guess" data-name="Pierre Gasly"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/alpine.png" class="team-logo"> <div class="driver-info">Franco Colapinto</div> <input type="number" class="guess" data-name="Franco Colapinto"></div>
-
-    <div class="driver-card"><img src="https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" class="team-logo"> <div class="driver-info">Nico Hulkenberg</div> <input type="number" class="guess" data-name="Nico Hulkenberg"></div>
-
-    <div class="driver-card"><img src="https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" class="team-logo"> <div class="driver-info">Gabriel Bortoleto</div> <input type="number" class="guess" data-name="Gabriel Bortoleto"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/haas.png" class="team-logo"> <div class="driver-info">Esteban Ocon</div> <input type="number" class="guess" data-name="Esteban Ocon"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/haas.png" class="team-logo"> <div class="driver-info">Oliver Bearman</div> <input type="number" class="guess" data-name="Oliver Bearman"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/williams.png" class="team-logo"> <div class="driver-info">Alex Albon</div> <input type="number" class="guess" data-name="Alex Albon"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/williams.png" class="team-logo"> <div class="driver-info">Carlos Sainz</div> <input type="number" class="guess" data-name="Carlos Sainz"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/rb.png" class="team-logo"> <div class="driver-info">Liam Lawson</div> <input type="number" class="guess" data-name="Liam Lawson"></div>
-
-    <div class="driver-card"><img src="https://www.formula1.com/etc/designs/fom-website/teamLogos/rb.png" class="team-logo"> <div class="driver-info">Arvid Lindblad</div> <input type="number" class="guess" data-name="Arvid Lindblad"></div>
-
-    <div class="driver-card"><img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Cadillac_logo.svg" class="team-logo"> <div class="driver-info">Sergio Perez</div> <input type="number" class="guess" data-name="Sergio Perez"></div>
-
-    <div class="driver-card"><img src="https://upload.wikimedia.org/wikipedia/commons/3/30/Cadillac_logo.svg" class="team-logo"> <div class="driver-info">Valtteri Bottas</div> <input type="number" class="guess" data-name="Valtteri Bottas"></div>
-
-  </div>
-
+  <div class="setup-section"><input type="text" id="player-name" placeholder="ENTER YOUR NAME"></div>
+  <div id="grid" class="driver-list"></div>
   <div class="btn-group">
     <button id="submit-btn" onclick="submitToLeaderboard()">Submit Picks</button>
-    <button id="reset-btn" onclick="resetBoard()">Clear</button>
+    <button id="reset-btn" onclick="resetBoard()">Clear Board</button>
   </div>
   <div id="status-msg"></div>
 </div>
 <script>
-  const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzw1nk2ReiQgAULmV5dNRHgsnUrzE_k4zjQWFcRekpuWnSY0wQOJ6LRUMPZuMPyOy3RcA/exec";
+  var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzw1nk2ReiQgAULmV5dNRHgsnUrzE_k4zjQWFcRekpuWnSY0wQOJ6LRUMPZuMPyOy3RcA/exec";
+  var driverData = [
+    { name: "Max Verstappen", color: "#3671C6" }, { name: "Isack Hadjar", color: "#3671C6" },
+    { name: "Lando Norris", color: "#FF8000" }, { name: "Oscar Piastri", color: "#FF8000" },
+    { name: "Lewis Hamilton", color: "#E80020" }, { name: "Charles Leclerc", color: "#E80020" },
+    { name: "George Russell", color: "#27F4D2" }, { name: "Kimi Antonelli", color: "#27F4D2" },
+    { name: "Fernando Alonso", color: "#229971" }, { name: "Lance Stroll", color: "#229971" },
+    { name: "Pierre Gasly", color: "#0093CC" }, { name: "Franco Colapinto", color: "#0093CC" },
+    { name: "Nico Hulkenberg", color: "#FF0000" }, { name: "Gabriel Bortoleto", color: "#FF0000" },
+    { name: "Esteban Ocon", color: "#B6BABD" }, { name: "Oliver Bearman", color: "#B6BABD" },
+    { name: "Alex Albon", color: "#64C4FF" }, { name: "Carlos Sainz", color: "#64C4FF" },
+    { name: "Liam Lawson", color: "#6692FF" }, { name: "Arvid Lindblad", color: "#6692FF" },
+    { name: "Sergio Perez", color: "#808080" }, { name: "Valtteri Bottas", color: "#808080" }
+  ];
+  var grid = document.getElementById('grid');
+  driverData.sort(function(a, b){ return a.name.localeCompare(b.name); });
+  for (var i = 0; i < driverData.length; i++) {
+    var d = driverData[i];
+    var card = document.createElement('div');
+    card.className = 'driver-card';
+    card.innerHTML = '<div class="team-dot" style="background-color:' + d.color + '"></div>' +
+                     '<div class="driver-info">' + d.name + '</div>' +
+                     '<input type="number" class="guess" data-name="' + d.name + '" min="1" max="22" placeholder="Pos" onchange="checkDuplicate(this)">';
+    grid.appendChild(card);
+  }
+  function checkDuplicate(input) {
+    var val = input.value;
+    if (!val) return;
+    var allInputs = document.querySelectorAll('.guess');
+    for (var j = 0; j < allInputs.length; j++) {
+      if (allInputs[j] !== input && allInputs[j].value === val) {
+        alert("Position " + val + " is already assigned to another driver!");
+        input.value = "";
+        return;
+      }
+    }
+  }
   async function submitToLeaderboard() {
     var nameInput = document.getElementById('player-name').value.trim();
     var status = document.getElementById('status-msg');
-    if (!nameInput) { alert("Name required!"); return; }
+    if (!nameInput) { alert("Enter your name!"); return; }
     var predictions = [];
     var inputs = document.querySelectorAll('.guess');
-    inputs.forEach(input => {
-      if(input.value) predictions.push(input.getAttribute('data-name') + ":" + input.value);
-    });
-    status.innerHTML = "🏁 Sending to sheet...";
+    for (var k = 0; k < inputs.length; k++) {
+      if(inputs[k].value) predictions.push(inputs[k].getAttribute('data-name') + ":" + inputs[k].value);
+    }
+    status.innerHTML = "🏎️ Sending picks...";
     try {
       await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
-      status.innerHTML = "✅ SUCCESS! Ready for the race.";
+      status.innerHTML = "✅ SUBMITTED!";
     } catch (err) { status.innerHTML = "❌ Error: " + err; }
   }
-
   function resetBoard() {
-    document.querySelectorAll('.guess').forEach(i => i.value = "");
+    var inputs = document.querySelectorAll('.guess');
+    for (var l = 0; l < inputs.length; l++) { inputs[l].value = ""; }
+    document.getElementById('status-msg').innerHTML = "";
   }
 </script>
 </body>
 </html>
-
