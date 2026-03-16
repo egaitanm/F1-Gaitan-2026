@@ -3,99 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>F1 2026 Predictor Pro</title>
+<title>F1 2026 Prediction Game</title>
 <style>
-body { background-color: #15151e; color: white; font-family: sans-serif; text-align: center; padding: 20px; }
-.container { max-width: 900px; margin: auto; }
-h1 { color: #e10600; text-transform: uppercase; letter-spacing: 3px; }
-.setup-section { margin-bottom: 20px; padding: 15px; background: #1f1f27; border-radius: 8px; border: 1px solid #38383f; }
-#player-name { width: 280px; padding: 12px; border-radius: 4px; border: 1px solid #444; background: #000; color: #fff; font-size: 1.1rem; }
-.driver-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; margin: 25px 0; }
-.driver-card { background: #1f1f27; padding: 10px 15px; display: flex; align-items: center; border-radius: 6px; border-right: 4px solid #38383f; }
-.team-logo { width: 40px; height: 40px; object-fit: contain; margin-right: 15px; }
-.driver-info { flex-grow: 1; text-align: left; font-weight: bold; }
-input[type="number"] { width: 55px; padding: 10px; text-align: center; border-radius: 4px; border: 1px solid #444; background: #000; color: #fff; }
-.btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
-button { padding: 15px 30px; font-weight: bold; cursor: pointer; border: none; border-radius: 4px; color: white; text-transform: uppercase; }
-#submit-btn { background: #e10600; }
-#reset-btn { background: #38383f; }
-#status-msg { margin-top: 25px; font-weight: bold; }
+  body { background-color: #ffffff; color: #15151e; font-family: sans-serif; text-align: center; padding: 20px; margin: 0; }
+  .container { max-width: 900px; margin: auto; }
+  h1 { color: #e10600; text-transform: uppercase; letter-spacing: 2px; font-weight: 900; margin-bottom: 30px; }
+  .setup-section { margin-bottom: 25px; padding: 20px; background: #f4f4f4; border-radius: 12px; border: 1px solid #e0e0e0; }
+  #player-name { width: 280px; padding: 12px; border-radius: 6px; border: 2px solid #ccc; font-size: 1.1rem; text-align: center; }
+  #player-name:focus { border-color: #e10600; outnone; }
+  .driver-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; margin: 25px 0; }
+  .driver-card { background: #f9f9f9; padding: 12px 18px; display: flex; align-items: center; border-radius: 8px; border: 1px solid #eee; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+  .team-logo { width: 45px; height: 45px; object-fit: contain; margin-right: 15px; background: white; border-radius: 4px; padding: 2px; }
+  .driver-info { flex-grow: 1; text-align: left; font-weight: 700; color: #333; font-size: 1.1rem; }
+  input[type="number"] { width: 60px; padding: 10px; text-align: center; border-radius: 6px; border: 2px solid #ddd; font-weight: bold; font-size: 1.1rem; }
+  .btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 35px; }
+  button { padding: 16px 32px; font-weight: bold; cursor: pointer; border: none; border-radius: 8px; color: white; text-transform: uppercase; transition: 0.2s; }
+  #submit-btn { background: #e10600; }
+  #submit-btn:hover { background: #c60500; }
+  #reset-btn { background: #333; }
+  #status-msg { margin-top: 25px; font-weight: bold; font-size: 1.2rem; }
 </style>
 </head>
 <body>
 <div class="container">
-<h1>F1 2026 Predictions</h1>
-<div class="setup-section">
-<input type="text" id="player-name" placeholder="YOUR NAME">
-</div>
-<div id="grid" class="driver-list"></div>
-<div class="btn-group">
-<button id="submit-btn" onclick="submitToLeaderboard()">Submit Picks</button>
-<button id="reset-btn" onclick="resetBoard()">Reset</button>
-</div>
-<div id="status-msg"></div>
+  <h1>F1 2026 Predictions</h1>
+  <div class="setup-section">
+    <input type="text" id="player-name" placeholder="ENTER YOUR NAME">
+  </div>
+  <div id="grid" class="driver-list"></div>
+  <div class="btn-group">
+    <button id="submit-btn" onclick="submitToLeaderboard()">Submit Results</button>
+    <button id="reset-btn" onclick="resetBoard()">Clear Board</button>
+  </div>
+  <div id="status-msg"></div>
 </div>
 <script>
-const WEB_APP_URL = " https://script.google.com/macros/s/AKfycbzw1nk2ReiQgAULmV5dNRHgsnUrzE_k4zjQWFcRekpuWnSY0wQOJ6LRUMPZuMPyOy3RcA/exec";
-const driverData = [
-{ name: "Max Verstappen", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Red_Bull_Racing_logo.svg" },
-{ name: "Isack Hadjar", logo: "https://upload.wikimedia.org/wikipedia/en/b/b4/Red_Bull_Racing_logo.svg" },
-{ name: "Lando Norris", logo: "https://upload.wikimedia.org/wikipedia/en/6/66/McLaren_Racing_logo.svg" },
-{ name: "Oscar Piastri", logo: "https://upload.wikimedia.org/wikipedia/en/6/66/McLaren_Racing_logo.svg" },
-{ name: "Lewis Hamilton", logo: "https://upload.wikimedia.org/wikipedia/en/d/d1/Ferrari-Logo.svg" },
-{ name: "Charles Leclerc", logo: "https://upload.wikimedia.org/wikipedia/en/d/d1/Ferrari-Logo.svg" },
-{ name: "George Russell", logo: "https://upload.wikimedia.org/wikipedia/commons/f/fb/Mercedes-AMG_Petronas_F1_Team_Logo.svg" },
-{ name: "Kimi Antonelli", logo: "https://upload.wikimedia.org/wikipedia/commons/f/fb/Mercedes-AMG_Petronas_F1_Team_Logo.svg" },
-{ name: "Fernando Alonso", logo: "https://upload.wikimedia.org/wikipedia/en/d/d4/Aston_Martin_F1_team_logo.svg" },
-{ name: "Lance Stroll", logo: "https://upload.wikimedia.org/wikipedia/en/d/d4/Aston_Martin_F1_team_logo.svg" },
-{ name: "Pierre Gasly", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Alpine_F1_Team_Logo.svg" },
-{ name: "Franco Colapinto", logo: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Alpine_F1_Team_Logo.svg" },
-{ name: "Nico Hulkenberg", logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" },
-{ name: "Gabriel Bortoleto", logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" },
-{ name: "Esteban Ocon", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Haas_F1_Team_logo.svg" },
-{ name: "Oliver Bearman", logo: "https://upload.wikimedia.org/wikipedia/commons/b/b2/Haas_F1_Team_logo.svg" },
-{ name: "Alex Albon", logo: "https://upload.wikimedia.org/wikipedia/en/e/e0/Williams_F1_logo.svg" },
-{ name: "Carlos Sainz", logo: "https://upload.wikimedia.org/wikipedia/en/e/e0/Williams_F1_logo.svg" },
-{ name: "Liam Lawson", logo: "https://upload.wikimedia.org/wikipedia/en/8/81/VCARB_F1_logo.svg" },
-{ name: "Arvid Lindblad", logo: "https://upload.wikimedia.org/wikipedia/en/8/81/VCARB_F1_logo.svg" },
-{ name: "Sergio Perez", logo: "https://upload.wikimedia.org/wikipedia/commons/3/30/Cadillac_logo.svg" },
-{ name: "Valtteri Bottas", logo: "https://upload.wikimedia.org/wikipedia/commons/3/30/Cadillac_logo.svg" }
-];
-const grid = document.getElementById('grid');
-driverData.sort((a, b) => a.name.localeCompare(b.name)).forEach(d => {
-  const card = document.createElement('div');
-  card.className = 'driver-card';
-  card.innerHTML = '<img src="' + d.logo + '" class="team-logo"><div class="driver-info">' + d.name + '</div><input type="number" class="guess" data-name="' + d.name + '" min="1" max="22" placeholder="Pos" onchange="checkDuplicate(this)">';
-  grid.appendChild(card);
-});
-function checkDuplicate(input) {
-  const val = input.value;
-  if (!val) return;
-  const allInputs = document.querySelectorAll('.guess');
-  let count = 0;
-  allInputs.forEach(i => { if (i.value === val) count++; });
-  if (count > 1) { alert("Position " + val + " is already taken!"); input.value = ""; }
-}
-async function submitToLeaderboard() {
-  let nameInput = document.getElementById('player-name').value.trim();
-  const status = document.getElementById('status-msg');
-  if (!nameInput) { alert("Please enter your name!"); return; }
-  const predictions = [];
-  document.querySelectorAll('.guess').forEach(input => {
-    if(input.value) predictions.push(input.getAttribute('data-name') + ":" + input.value);
+  const WEB_APP_URL = " https://script.google.com/macros/s/AKfycbzw1nk2ReiQgAULmV5dNRHgsnUrzE_k4zjQWFcRekpuWnSY0wQOJ6LRUMPZuMPyOy3RcA/exec";
+  const driverData = [
+    { name: "Max Verstappen", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/red_bull.png" },
+    { name: "Isack Hadjar", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/red_bull.png" },
+    { name: "Lando Norris", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/mclaren.png" },
+    { name: "Oscar Piastri", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/mclaren.png" },
+    { name: "Lewis Hamilton", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/ferrari.png" },
+    { name: "Charles Leclerc", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/ferrari.png" },
+    { name: "George Russell", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/mercedes.png" },
+    { name: "Kimi Antonelli", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/mercedes.png" },
+    { name: "Fernando Alonso", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/aston_martin.png" },
+    { name: "Lance Stroll", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/aston_martin.png" },
+    { name: "Pierre Gasly", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/alpine.png" },
+    { name: "Franco Colapinto", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/alpine.png" },
+    { name: "Nico Hulkenberg", logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" },
+    { name: "Gabriel Bortoleto", logo: "https://upload.wikimedia.org/wikipedia/commons/9/92/Audi-Logo_2016.svg" },
+    { name: "Esteban Ocon", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/haas.png" },
+    { name: "Oliver Bearman", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/haas.png" },
+    { name: "Alex Albon", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/williams.png" },
+    { name: "Carlos Sainz", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/williams.png" },
+    { name: "Liam Lawson", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/rb.png" },
+    { name: "Arvid Lindblad", logo: "https://www.formula1.com/etc/designs/fom-website/teamLogos/rb.png" },
+    { name: "Sergio Perez", logo: "https://upload.wikimedia.org/wikipedia/commons/3/30/Cadillac_logo.svg" },
+    { name: "Valtteri Bottas", logo: "https://upload.wikimedia.org/wikipedia/commons/3/30/Cadillac_logo.svg" }
+  ];
+  const grid = document.getElementById('grid');
+  driverData.sort((a, b) => a.name.localeCompare(b.name)).forEach(d => {
+    const card = document.createElement('div');
+    card.className = 'driver-card';
+    card.innerHTML = <img src="${d.logo}" class="team-logo" onerror="this.src='https://via.placeholder.com/45?text=F1'"><div class="driver-info">${d.name}</div><input type="number" class="guess" data-name="${d.name}" min="1" max="22" placeholder="Pos" onchange="checkDuplicate(this)">;
+    grid.appendChild(card);
   });
-  if (predictions.length < 1) { alert("Make at least one prediction!"); return; }
-  status.innerHTML = "🏎️ Speeding to the database...";
-  try {
-    await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
-    status.innerHTML = "🏁 CHECKERED FLAG! Submission successful.";
-    status.style.color = "#e10600";
-  } catch (err) { status.innerHTML = "❌ Engine Failure: " + err; }
-}
-function resetBoard() {
-  document.querySelectorAll('.guess').forEach(i => i.value = "");
-  document.getElementById('status-msg').innerHTML = "";
-}
+  function checkDuplicate(input) {
+    const val = input.value;
+    if (!val) return;
+    const allInputs = document.querySelectorAll('.guess');
+    let count = 0;
+    allInputs.forEach(i => { if (i.value === val) count++; });
+    if (count > 1) { alert("Position " + val + " is already taken!"); input.value = ""; }
+  }
+  async function submitToLeaderboard() {
+    let nameInput = document.getElementById('player-name').value.trim();
+    const status = document.getElementById('status-msg');
+    if (!nameInput) { alert("Please enter your name!"); return; }
+    const predictions = [];
+    document.querySelectorAll('.guess').forEach(input => {
+      if(input.value) predictions.push(input.getAttribute('data-name') + ":" + input.value);
+    });
+    if (predictions.length < 1) { alert("Make at least one prediction!"); return; }
+    status.innerHTML = "🏎️ Speeding to the database...";
+    try {
+      await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
+      status.innerHTML = "🏁 CHECKERED FLAG! Submission successful.";
+      status.style.color = "#2e7d32";
+    } catch (err) { status.innerHTML = "❌ Engine Failure: " + err; }
+  }
+  function resetBoard() {
+    document.querySelectorAll('.guess').forEach(i => i.value = "");
+    document.getElementById('status-msg').innerHTML = "";
+  }
 </script>
 </body>
 </html>
