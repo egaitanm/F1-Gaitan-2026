@@ -28,113 +28,113 @@
    
    
    
-Submit Picks
-Clear Board
+     Submit Picks
+     Clear Board
    
    
  
  
    var WEB_APP_URL = " https://script.google.com/macros/s/AKfycbyHErkDuGT_pz65OgBomSWYko2CoW4BUobDBcsBqACk0r-U5YoBclTLQUl6APwtvbtM-A/exec";
    var driverData = [
-{ name: "Max Verstappen", color: "#3671C6" }, { name: "Isack Hadjar", color: "#3671C6" },
-{ name: "Lando Norris", color: "#FF8000" }, { name: "Oscar Piastri", color: "#FF8000" },
-{ name: "Lewis Hamilton", color: "#E80020" }, { name: "Charles Leclerc", color: "#E80020" },
-{ name: "George Russell", color: "#27F4D2" }, { name: "Kimi Antonelli", color: "#27F4D2" },
-{ name: "Fernando Alonso", color: "#229971" }, { name: "Lance Stroll", color: "#229971" },
-{ name: "Pierre Gasly", color: "#0093CC" }, { name: "Franco Colapinto", color: "#0093CC" },
-{ name: "Nico Hulkenberg", color: "#FF0000" }, { name: "Gabriel Bortoleto", color: "#FF0000" },
-{ name: "Esteban Ocon", color: "#B6BABD" }, { name: "Oliver Bearman", color: "#B6BABD" },
-{ name: "Alex Albon", color: "#64C4FF" }, { name: "Carlos Sainz", color: "#64C4FF" },
-{ name: "Liam Lawson", color: "#6692FF" }, { name: "Arvid Lindblad", color: "#6692FF" },
-{ name: "Sergio Perez", color: "#808080" }, { name: "Valtteri Bottas", color: "#808080" }
+     { name: "Max Verstappen", color: "#3671C6" }, { name: "Isack Hadjar", color: "#3671C6" },
+     { name: "Lando Norris", color: "#FF8000" }, { name: "Oscar Piastri", color: "#FF8000" },
+     { name: "Lewis Hamilton", color: "#E80020" }, { name: "Charles Leclerc", color: "#E80020" },
+     { name: "George Russell", color: "#27F4D2" }, { name: "Kimi Antonelli", color: "#27F4D2" },
+     { name: "Fernando Alonso", color: "#229971" }, { name: "Lance Stroll", color: "#229971" },
+     { name: "Pierre Gasly", color: "#0093CC" }, { name: "Franco Colapinto", color: "#0093CC" },
+     { name: "Nico Hulkenberg", color: "#FF0000" }, { name: "Gabriel Bortoleto", color: "#FF0000" },
+     { name: "Esteban Ocon", color: "#B6BABD" }, { name: "Oliver Bearman", color: "#B6BABD" },
+     { name: "Alex Albon", color: "#64C4FF" }, { name: "Carlos Sainz", color: "#64C4FF" },
+     { name: "Liam Lawson", color: "#6692FF" }, { name: "Arvid Lindblad", color: "#6692FF" },
+     { name: "Sergio Perez", color: "#808080" }, { name: "Valtteri Bottas", color: "#808080" }
    ];
 
    var grid = document.getElementById('grid');
    driverData.sort(function(a, b){ return a.name.localeCompare(b.name); });
 
    for (var i = 0; i < driverData.length; i++) {
-var d = driverData[i];
-var card = document.createElement('div');
-card.className = 'driver-card';
-card.innerHTML = '' +
-                 '' + d.name + '' +
-                 '';
-grid.appendChild(card);
+     var d = driverData[i];
+     var card = document.createElement('div');
+     card.className = 'driver-card';
+     card.innerHTML = '' +
+                      '' + d.name + '' +
+                      '';
+     grid.appendChild(card);
    }
 
    // Guardrail (ii): Un-skippable check for values over 22
    function validateInput(input) {
-var val = parseInt(input.value, 10);
-if (!isNaN(val) && (val > 22 || val < 1)) {
-  alert("🚨 Invalid Position! Positions must be between 1 and 22.");
-  input.value = "";
-  setTimeout(function() { input.focus(); }, 10);
-}
+     var val = parseInt(input.value, 10);
+     if (!isNaN(val) && (val > 22 || val < 1)) {
+       alert("🚨 Invalid Position! Positions must be between 1 and 22.");
+       input.value = "";
+       setTimeout(function() { input.focus(); }, 10);
+     }
    }
 
    function checkDuplicate(input) {
-var val = input.value;
-if (!val) return;
-var allInputs = document.querySelectorAll('.guess');
-for (var j = 0; j < allInputs.length; j++) {
-  if (allInputs[j] !== input && allInputs[j].value === val) {
-    alert("⚠️ Position " + val + " is already assigned to another driver!");
-    input.value = "";
-    return;
-  }
-}
+     var val = input.value;
+     if (!val) return;
+     var allInputs = document.querySelectorAll('.guess');
+     for (var j = 0; j < allInputs.length; j++) {
+       if (allInputs[j] !== input && allInputs[j].value === val) {
+         alert("⚠️ Position " + val + " is already assigned to another driver!");
+         input.value = "";
+         return;
+       }
+     }
    }
 
    async function submitToLeaderboard() {
-var nameInput = document.getElementById('player-name').value.trim();
-var status = document.getElementById('status-msg');
-if (!nameInput) { alert("Please enter your name!"); return; }
+     var nameInput = document.getElementById('player-name').value.trim();
+     var status = document.getElementById('status-msg');
+     if (!nameInput) { alert("Please enter your name!"); return; }
 
-var inputs = document.querySelectorAll('.guess');
-var predictions = [];
-var assignedPositions = [];
+     var inputs = document.querySelectorAll('.guess');
+     var predictions = [];
+     var assignedPositions = [];
 
-// Scan absolutely everything submitted
-for (var m = 0; m < inputs.length; m++) {
-  var currentVal = parseInt(inputs[m].value, 10);
+     // Scan absolutely everything submitted
+     for (var m = 0; m < inputs.length; m++) {
+       var currentVal = parseInt(inputs[m].value, 10);
 
-  // Double check constraint (ii) at submission time just in case
-  if (!isNaN(currentVal) && (currentVal > 22 || currentVal < 1)) {
-    alert("❌ Submission Blocked! Found an invalid position: " + currentVal);
-    inputs[m].value = "";
-    return;
-  }
+       // Double check constraint (ii) at submission time just in case
+       if (!isNaN(currentVal) && (currentVal > 22 || currentVal < 1)) {
+         alert("❌ Submission Blocked! Found an invalid position: " + currentVal);
+         inputs[m].value = "";
+         return;
+       }
 
-  if (!isNaN(currentVal)) {
-    assignedPositions.push(currentVal);
-    predictions.push(inputs[m].getAttribute('data-name') + ":" + currentVal);
-  }
-}
+       if (!isNaN(currentVal)) {
+         assignedPositions.push(currentVal);
+         predictions.push(inputs[m].getAttribute('data-name') + ":" + currentVal);
+       }
+     }
 
-// Guardrail (i): Build a math map to verify 1 through 22 all exist
-var missingPositions = [];
-for (var p = 1; p <= 22; p++) {
-  if (assignedPositions.indexOf(p) === -1) {
-    missingPositions.push(p);
-  }
-}
+     // Guardrail (i): Build a math map to verify 1 through 22 all exist
+     var missingPositions = [];
+     for (var p = 1; p <= 22; p++) {
+       if (assignedPositions.indexOf(p) === -1) {
+         missingPositions.push(p);
+       }
+     }
 
-if (missingPositions.length > 0) {
-  alert("❌ Submission Blocked!\n\nYou must assign ALL 22 places.\nMissing position numbers: " + missingPositions.join(", "));
-  return;
-}
+     if (missingPositions.length > 0) {
+       alert("❌ Submission Blocked!\n\nYou must assign ALL 22 places.\nMissing position numbers: " + missingPositions.join(", "));
+       return;
+     }
 
-status.innerHTML = "🏎️ Speeding predictions to the scoreboard...";
-try {
-  await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
-  status.innerHTML = "✅ SUBMITTED SUCCESSFULLY!";
-} catch (err) { status.innerHTML = "❌ Engine Failure: " + err; }
+     status.innerHTML = "🏎️ Speeding predictions to the scoreboard...";
+     try {
+       await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
+       status.innerHTML = "✅ SUBMITTED SUCCESSFULLY!";
+     } catch (err) { status.innerHTML = "❌ Engine Failure: " + err; }
    }
 
    function resetBoard() {
-var inputs = document.querySelectorAll('.guess');
-for (var l = 0; l < inputs.length; l++) { inputs[l].value = ""; }
-document.getElementById('status-msg').innerHTML = "";
+     var inputs = document.querySelectorAll('.guess');
+     for (var l = 0; l < inputs.length; l++) { inputs[l].value = ""; }
+     document.getElementById('status-msg').innerHTML = "";
    }
  
  
