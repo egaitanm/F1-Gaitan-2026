@@ -1,96 +1,123 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>F1 2026 Predictions</title>
-<style>
-  body { background-color: #ffffff; color: #15151e; font-family: sans-serif; text-align: center; padding: 20px; }
-  .container { max-width: 800px; margin: auto; }
-  h1 { color: #e10600; text-transform: uppercase; font-weight: 900; }
-  .setup-section { margin-bottom: 20px; padding: 15px; background: #f4f4f4; border-radius: 8px; border: 1px solid #ddd; }
-  #player-name { width: 250px; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 1rem; }
-  .driver-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; margin: 20px 0; }
-  .driver-card { background: #f9f9f9; padding: 12px; display: flex; align-items: center; border-radius: 6px; border: 1px solid #eee; }
-  .team-dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 15px; flex-shrink: 0; }
-  .driver-info { flex-grow: 1; text-align: left; font-weight: bold; }
-  input[type="number"] { width: 50px; padding: 8px; text-align: center; border-radius: 4px; border: 1px solid #ccc; }
-  .btn-group { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
-  button { padding: 15px 30px; font-weight: bold; cursor: pointer; border-radius: 4px; border: none; color: white; text-transform: uppercase; }
-  #submit-btn { background: #e10600; }
-  #reset-btn { background: #333; }
-  #status-msg { margin-top: 20px; font-weight: bold; }
-</style>
-</head>
-<body>
-<div class="container">
-  <h1>F1 2026 Season Predictor</h1>
-  <div class="setup-section"><input type="text" id="player-name" placeholder="ENTER YOUR NAME"></div>
-  <div id="grid" class="driver-list"></div>
-  <div class="btn-group">
-    <button id="submit-btn" onclick="submitToLeaderboard()">Submit Picks</button>
-    <button id="reset-btn" onclick="resetBoard()">Clear Board</button>
-  </div>
-  <div id="status-msg"></div>
-</div>
-<script>
-  var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzw1nk2ReiQgAULmV5dNRHgsnUrzE_k4zjQWFcRekpuWnSY0wQOJ6LRUMPZuMPyOy3RcA/exec";
-  var driverData = [
-    { name: "Max Verstappen", color: "#3671C6" }, { name: "Isack Hadjar", color: "#3671C6" },
-    { name: "Lando Norris", color: "#FF8000" }, { name: "Oscar Piastri", color: "#FF8000" },
-    { name: "Lewis Hamilton", color: "#E80020" }, { name: "Charles Leclerc", color: "#E80020" },
-    { name: "George Russell", color: "#27F4D2" }, { name: "Kimi Antonelli", color: "#27F4D2" },
-    { name: "Fernando Alonso", color: "#229971" }, { name: "Lance Stroll", color: "#229971" },
-    { name: "Pierre Gasly", color: "#0093CC" }, { name: "Franco Colapinto", color: "#0093CC" },
-    { name: "Nico Hulkenberg", color: "#FF0000" }, { name: "Gabriel Bortoleto", color: "#FF0000" },
-    { name: "Esteban Ocon", color: "#B6BABD" }, { name: "Oliver Bearman", color: "#B6BABD" },
-    { name: "Alex Albon", color: "#64C4FF" }, { name: "Carlos Sainz", color: "#64C4FF" },
-    { name: "Liam Lawson", color: "#6692FF" }, { name: "Arvid Lindblad", color: "#6692FF" },
-    { name: "Sergio Perez", color: "#808080" }, { name: "Valtteri Bottas", color: "#808080" }
-  ];
-  var grid = document.getElementById('grid');
-  driverData.sort(function(a, b){ return a.name.localeCompare(b.name); });
-  for (var i = 0; i < driverData.length; i++) {
-    var d = driverData[i];
-    var card = document.createElement('div');
-    card.className = 'driver-card';
-    card.innerHTML = '<div class="team-dot" style="background-color:' + d.color + '"></div>' +
-                     '<div class="driver-info">' + d.name + '</div>' +
-                     '<input type="number" class="guess" data-name="' + d.name + '" min="1" max="22" placeholder="Pos" onchange="checkDuplicate(this)">';
-    grid.appendChild(card);
-  }
-  function checkDuplicate(input) {
-    var val = input.value;
-    if (!val) return;
-    var allInputs = document.querySelectorAll('.guess');
-    for (var j = 0; j < allInputs.length; j++) {
-      if (allInputs[j] !== input && allInputs[j].value === val) {
-        alert("Position " + val + " is already assigned to another driver!");
-        input.value = "";
-        return;
-      }
-    }
-  }
-  async function submitToLeaderboard() {
-    var nameInput = document.getElementById('player-name').value.trim();
-    var status = document.getElementById('status-msg');
-    if (!nameInput) { alert("Enter your name!"); return; }
-    var predictions = [];
-    var inputs = document.querySelectorAll('.guess');
-    for (var k = 0; k < inputs.length; k++) {
-      if(inputs[k].value) predictions.push(inputs[k].getAttribute('data-name') + ":" + inputs[k].value);
-    }
-    status.innerHTML = "🏎️ Sending picks...";
-    try {
-      await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
-      status.innerHTML = "✅ SUBMITTED!";
-    } catch (err) { status.innerHTML = "❌ Error: " + err; }
-  }
-  function resetBoard() {
-    var inputs = document.querySelectorAll('.guess');
-    for (var l = 0; l < inputs.length; l++) { inputs[l].value = ""; }
-    document.getElementById('status-msg').innerHTML = "";
-  }
-</script>
-</body>
-</html>
+ 
+ 
+ 
+ 
+ 
+ F1 2026 Predictions
+ 
+   body { background-color: #ffffff; color: #15151e; font-family: sans-serif; text-align: center; padding: 20px; }
+   .container { max-width: 800px; margin: auto; }
+   h1 { color: #e10600; text-transform: uppercase; font-weight: 900; }
+   .setup-section { margin-bottom: 20px; padding: 15px; background: #f4f4f4; border-radius: 8px; border: 1px solid #ddd; }
+   #player-name { width: 250px; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 1rem; }
+   .driver-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; margin: 20px 0; }
+   .driver-card { background: #f9f9f9; padding: 12px; display: flex; align-items: center; border-radius: 6px; border: 1px solid #eee; }
+   .team-dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 15px; flex-shrink: 0; }
+   .driver-info { flex-grow: 1; text-align: left; font-weight: bold; }
+   input[type="number"] { width: 50px; padding: 8px; text-align: center; border-radius: 4px; border: 1px solid #ccc; }
+   .btn-group { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
+   button { padding: 15px 30px; font-weight: bold; cursor: pointer; border-radius: 4px; border: none; color: white; text-transform: uppercase; }
+   #submit-btn { background: #e10600; }
+   #reset-btn { background: #333; }
+   #status-msg { margin-top: 20px; font-weight: bold; }
+ 
+ 
+ 
+ 
+   F1 2026 Season Predictor
+   
+   
+   
+     Submit Picks
+     Clear Board
+   
+   
+ 
+ 
+   var WEB_APP_URL = " https://script.google.com/macros/s/AKfycbx8RNHVHk9cIPAfjIihTnHEh0yIltKjuyRWiGc9FPiGb0-UHttsKH6aY3goLRw0nQN5wQ/exec";
+   var driverData = [
+     { name: "Max Verstappen", color: "#3671C6" }, { name: "Isack Hadjar", color: "#3671C6" },
+     { name: "Lando Norris", color: "#FF8000" }, { name: "Oscar Piastri", color: "#FF8000" },
+     { name: "Lewis Hamilton", color: "#E80020" }, { name: "Charles Leclerc", color: "#E80020" },
+     { name: "George Russell", color: "#27F4D2" }, { name: "Kimi Antonelli", color: "#27F4D2" },
+     { name: "Fernando Alonso", color: "#229971" }, { name: "Lance Stroll", color: "#229971" },
+     { name: "Pierre Gasly", color: "#0093CC" }, { name: "Franco Colapinto", color: "#0093CC" },
+     { name: "Nico Hulkenberg", color: "#FF0000" }, { name: "Gabriel Bortoleto", color: "#FF0000" },
+     { name: "Esteban Ocon", color: "#B6BABD" }, { name: "Oliver Bearman", color: "#B6BABD" },
+     { name: "Alex Albon", color: "#64C4FF" }, { name: "Carlos Sainz", color: "#64C4FF" },
+     { name: "Liam Lawson", color: "#6692FF" }, { name: "Arvid Lindblad", color: "#6692FF" },
+     { name: "Sergio Perez", color: "#808080" }, { name: "Valtteri Bottas", color: "#808080" }
+   ];
+
+   var grid = document.getElementById('grid');
+   driverData.sort(function(a, b){ return a.name.localeCompare(b.name); });
+
+   for (var i = 0; i < driverData.length; i++) {
+     var d = driverData[i];
+     var card = document.createElement('div');
+     card.className = 'driver-card';
+     card.innerHTML = '' +
+                      '' + d.name + '' +
+                      '';
+     grid.appendChild(card);
+   }
+
+   function checkDuplicate(input) {
+     var val = parseInt(input.value, 10);
+     if (!val) return;
+
+     // Check feature (ii): If place is higher than 22
+     if (val > 22 || val < 1) {
+       alert("Invalid Position! Please choose a position between 1 and 22.");
+       input.value = "";
+       return;
+     }
+
+     var allInputs = document.querySelectorAll('.guess');
+     for (var j = 0; j < allInputs.length; j++) {
+       if (allInputs[j] !== input && parseInt(allInputs[j].value, 10) === val) {
+         alert("Position " + val + " is already assigned to another driver!");
+         input.value = "";
+         return;
+       }
+     }
+   }
+
+   async function submitToLeaderboard() {
+     var nameInput = document.getElementById('player-name').value.trim();
+     var status = document.getElementById('status-msg');
+     if (!nameInput) { alert("Enter your name!"); return; }
+
+     var predictions = [];
+     var inputs = document.querySelectorAll('.guess');
+     var filledCount = 0;
+
+     for (var k = 0; k < inputs.length; k++) {
+       if (inputs[k].value) {
+         filledCount++;
+         predictions.push(inputs[k].getAttribute('data-name') + ":" + inputs[k].value);
+       }
+     }
+
+     // Check feature (i): Must assign all 22 places
+     if (filledCount < 22) {
+       var missing = 22 - filledCount;
+       alert("Grid incomplete! You have only predicted " + filledCount + " drivers. You are missing " + missing + " positions.");
+       return;
+     }
+
+     status.innerHTML = "🏎️ Sending picks...";
+     try {
+       await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
+       status.innerHTML = "✅ SUBMITTED!";
+     } catch (err) { status.innerHTML = "❌ Error: " + err; }
+   }
+
+   function resetBoard() {
+     var inputs = document.querySelectorAll('.guess');
+     for (var l = 0; l < inputs.length; l++) { inputs[l].value = ""; }
+     document.getElementById('status-msg').innerHTML = "";
+   }
+ 
+ 
+
