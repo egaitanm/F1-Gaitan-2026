@@ -34,7 +34,7 @@
    
  
  
-   var WEB_APP_URL = " https://script.google.com/macros/s/AKfycbx8RNHVHk9cIPAfjIihTnHEh0yIltKjuyRWiGc9FPiGb0-UHttsKH6aY3goLRw0nQN5wQ/exec";
+   var WEB_APP_URL = " https://script.google.com/macros/s/AKfycbyHErkDuGT_pz65OgBomSWYko2CoW4BUobDBcsBqACk0r-U5YoBclTLQUl6APwtvbtM-A/exec";
    var driverData = [
      { name: "Max Verstappen", color: "#3671C6" }, { name: "Isack Hadjar", color: "#3671C6" },
      { name: "Lando Norris", color: "#FF8000" }, { name: "Oscar Piastri", color: "#FF8000" },
@@ -62,21 +62,23 @@
      grid.appendChild(card);
    }
 
-   function checkDuplicate(input) {
+   // Guardrail (ii): Live check for values over 22 as they type
+   function validateInput(input) {
      var val = parseInt(input.value, 10);
-     if (!val) return;
-
-     // Check feature (ii): If place is higher than 22
-     if (val > 22 || val < 1) {
-       alert("Invalid Position! Please choose a position between 1 and 22.");
+     if (!isNaN(val) && (val > 22 || val < 1)) {
+       alert("🚨 Invalid Position! You cannot choose a position higher than 22.");
        input.value = "";
-       return;
+       input.focus();
      }
+   }
 
+   function checkDuplicate(input) {
+     var val = input.value;
+     if (!val) return;
      var allInputs = document.querySelectorAll('.guess');
      for (var j = 0; j < allInputs.length; j++) {
-       if (allInputs[j] !== input && parseInt(allInputs[j].value, 10) === val) {
-         alert("Position " + val + " is already assigned to another driver!");
+       if (allInputs[j] !== input && allInputs[j].value === val) {
+         alert("⚠️ Position " + val + " is already assigned to another driver!");
          input.value = "";
          return;
        }
@@ -86,31 +88,41 @@
    async function submitToLeaderboard() {
      var nameInput = document.getElementById('player-name').value.trim();
      var status = document.getElementById('status-msg');
-     if (!nameInput) { alert("Enter your name!"); return; }
+     if (!nameInput) { alert("Please enter your name!"); return; }
 
-     var predictions = [];
      var inputs = document.querySelectorAll('.guess');
-     var filledCount = 0;
+     var predictions = [];
+     var assignedPositions = [];
 
-     for (var k = 0; k < inputs.length; k++) {
-       if (inputs[k].value) {
-         filledCount++;
-         predictions.push(inputs[k].getAttribute('data-name') + ":" + inputs[k].value);
+     // Collect all assigned data
+     inputs.forEach(function(input) {
+       var val = input.value;
+       if (val) {
+         var num = parseInt(val, 10);
+         assignedPositions.push(num);
+         predictions.push(input.getAttribute('data-name') + ":" + num);
+       }
+     });
+
+     // Guardrail (i): Verify every position from 1 to 22 exists in the entry
+     var missingPositions = [];
+     for (var p = 1; p <= 22; p++) {
+       if (assignedPositions.indexOf(p) === -1) {
+         missingPositions.push(p);
        }
      }
 
-     // Check feature (i): Must assign all 22 places
-     if (filledCount < 22) {
-       var missing = 22 - filledCount;
-       alert("Grid incomplete! You have only predicted " + filledCount + " drivers. You are missing " + missing + " positions.");
+     if (missingPositions.length > 0) {
+       alert("❌ Submission Blocked!\n\nYou must assign ALL 22 unique places.\nMissing position numbers: " + missingPositions.join(", "));
        return;
      }
 
-     status.innerHTML = "🏎️ Sending picks...";
+     status.innerHTML = "🏎️ Speeding predictions to the scoreboard...";
      try {
        await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
-       status.innerHTML = "✅ SUBMITTED!";
-     } catch (err) { status.innerHTML = "❌ Error: " + err; }
+       status.innerHTML = "✅ SUBMITTED SUCCESSFULLY!";
+       status.style.color = "#2e7d32";
+     } catch (err) { status.innerHTML = "❌ Engine Failure: " + err; }
    }
 
    function resetBoard() {
