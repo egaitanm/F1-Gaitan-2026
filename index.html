@@ -1,141 +1,141 @@
- 
- 
- 
- 
- 
- F1 2026 Predictions
- 
-   body { background-color: #ffffff; color: #15151e; font-family: sans-serif; text-align: center; padding: 20px; }
-   .container { max-width: 800px; margin: auto; }
-   h1 { color: #e10600; text-transform: uppercase; font-weight: 900; }
-   .setup-section { margin-bottom: 20px; padding: 15px; background: #f4f4f4; border-radius: 8px; border: 1px solid #ddd; }
-   #player-name { width: 250px; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 1rem; }
-   .driver-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; margin: 20px 0; }
-   .driver-card { background: #f9f9f9; padding: 12px; display: flex; align-items: center; border-radius: 6px; border: 1px solid #eee; }
-   .team-dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 15px; flex-shrink: 0; }
-   .driver-info { flex-grow: 1; text-align: left; font-weight: bold; }
-   input[type="number"] { width: 50px; padding: 8px; text-align: center; border-radius: 4px; border: 1px solid #ccc; }
-   .btn-group { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
-   button { padding: 15px 30px; font-weight: bold; cursor: pointer; border-radius: 4px; border: none; color: white; text-transform: uppercase; }
-   #submit-btn { background: #e10600; }
-   #reset-btn { background: #333; }
-   #status-msg { margin-top: 20px; font-weight: bold; }
- 
- 
- 
- 
-   F1 2026 Season Predictor
-   
-   
-   
-     Submit Picks
-     Clear Board
-   
-   
- 
- 
-   var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyHErkDuGT_pz65OgBomSWYko2CoW4BUobDBcsBqACk0r-U5YoBclTLQUl6APwtvbtM-A/exec";
-   var driverData = [
-     { name: "Max Verstappen", color: "#3671C6" }, { name: "Isack Hadjar", color: "#3671C6" },
-     { name: "Lando Norris", color: "#FF8000" }, { name: "Oscar Piastri", color: "#FF8000" },
-     { name: "Lewis Hamilton", color: "#E80020" }, { name: "Charles Leclerc", color: "#E80020" },
-     { name: "George Russell", color: "#27F4D2" }, { name: "Kimi Antonelli", color: "#27F4D2" },
-     { name: "Fernando Alonso", color: "#229971" }, { name: "Lance Stroll", color: "#229971" },
-     { name: "Pierre Gasly", color: "#0093CC" }, { name: "Franco Colapinto", color: "#0093CC" },
-     { name: "Nico Hulkenberg", color: "#FF0000" }, { name: "Gabriel Bortoleto", color: "#FF0000" },
-     { name: "Esteban Ocon", color: "#B6BABD" }, { name: "Oliver Bearman", color: "#B6BABD" },
-     { name: "Alex Albon", color: "#64C4FF" }, { name: "Carlos Sainz", color: "#64C4FF" },
-     { name: "Liam Lawson", color: "#6692FF" }, { name: "Arvid Lindblad", color: "#6692FF" },
-     { name: "Sergio Perez", color: "#808080" }, { name: "Valtteri Bottas", color: "#808080" }
-   ];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F1 2026 Predictions</title>
+<style>
+  body { background-color: #ffffff; color: #15151e; font-family: sans-serif; text-align: center; padding: 20px; }
+  .container { max-width: 800px; margin: auto; }
+  h1 { color: #e10600; text-transform: uppercase; font-weight: 900; }
+  .setup-section { margin-bottom: 20px; padding: 15px; background: #f4f4f4; border-radius: 8px; border: 1px solid #ddd; }
+  #player-name { width: 250px; padding: 10px; border-radius: 4px; border: 1px solid #ccc; font-size: 1rem; }
+  .driver-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 10px; margin: 20px 0; }
+  .driver-card { background: #f9f9f9; padding: 12px; display: flex; align-items: center; border-radius: 6px; border: 1px solid #eee; }
+  .team-dot { width: 12px; height: 12px; border-radius: 50%; margin-right: 15px; flex-shrink: 0; }
+  .driver-info { flex-grow: 1; text-align: left; font-weight: bold; }
+  input[type="number"] { width: 50px; padding: 8px; text-align: center; border-radius: 4px; border: 1px solid #ccc; }
+  .btn-group { margin-top: 30px; display: flex; justify-content: center; gap: 15px; }
+  button { padding: 15px 30px; font-weight: bold; cursor: pointer; border-radius: 4px; border: none; color: white; text-transform: uppercase; }
+  #submit-btn { background: #e10600; }
+  #reset-btn { background: #333; }
+  #status-msg { margin-top: 20px; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>F1 2026 Season Predictor</h1>
+  <div class="setup-section"><input type="text" id="player-name" placeholder="ENTER YOUR NAME"></div>
+  <div id="grid" class="driver-list"></div>
+  <div class="btn-group">
+    <button id="submit-btn" onclick="submitToLeaderboard()">Submit Picks</button>
+    <button id="reset-btn" onclick="resetBoard()">Clear Board</button>
+  </div>
+  <div id="status-msg"></div>
+</div>
+<script>
+  var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyHErkDuGT_pz65OgBomSWYko2CoW4BUobDBcsBqACk0r-U5YoBclTLQUl6APwtvbtM-A/exec";
+  var driverData = [
+    { name: "Max Verstappen", color: "#3671C6" }, { name: "Isack Hadjar", color: "#3671C6" },
+    { name: "Lando Norris", color: "#FF8000" }, { name: "Oscar Piastri", color: "#FF8000" },
+    { name: "Lewis Hamilton", color: "#E80020" }, { name: "Charles Leclerc", color: "#E80020" },
+    { name: "George Russell", color: "#27F4D2" }, { name: "Kimi Antonelli", color: "#27F4D2" },
+    { name: "Fernando Alonso", color: "#229971" }, { name: "Lance Stroll", color: "#229971" },
+    { name: "Pierre Gasly", color: "#0093CC" }, { name: "Franco Colapinto", color: "#0093CC" },
+    { name: "Nico Hulkenberg", color: "#FF0000" }, { name: "Gabriel Bortoleto", color: "#FF0000" },
+    { name: "Esteban Ocon", color: "#B6BABD" }, { name: "Oliver Bearman", color: "#B6BABD" },
+    { name: "Alex Albon", color: "#64C4FF" }, { name: "Carlos Sainz", color: "#64C4FF" },
+    { name: "Liam Lawson", color: "#6692FF" }, { name: "Arvid Lindblad", color: "#6692FF" },
+    { name: "Sergio Perez", color: "#808080" }, { name: "Valtteri Bottas", color: "#808080" }
+  ];
 
-   var grid = document.getElementById('grid');
-   driverData.sort(function(a, b){ return a.name.localeCompare(b.name); });
+  var grid = document.getElementById('grid');
+  driverData.sort(function(a, b){ return a.name.localeCompare(b.name); });
 
-   for (var i = 0; i < driverData.length; i++) {
-     var d = driverData[i];
-     var card = document.createElement('div');
-     card.className = 'driver-card';
-     card.innerHTML = '' +
-                      '' + d.name + '' +
-                      '';
-     grid.appendChild(card);
-   }
+  for (var i = 0; i < driverData.length; i++) {
+    var d = driverData[i];
+    var card = document.createElement('div');
+    card.className = 'driver-card';
+    card.innerHTML = '<div class="team-dot" style="background-color:' + d.color + '"></div>' +
+                     '<div class="driver-info">' + d.name + '</div>' +
+                     '<input type="number" class="guess" data-name="' + d.name + '" min="1" max="22" placeholder="Pos" onkeyup="validateInput(this)" onchange="validateInput(this); checkDuplicate(this);">';
+    grid.appendChild(card);
+  }
 
-   // Guardrail (ii): Un-skippable check for values over 22
-   function validateInput(input) {
-     var val = parseInt(input.value, 10);
-     if (!isNaN(val) && (val > 22 || val < 1)) {
-       alert("🚨 Invalid Position! Positions must be between 1 and 22.");
-       input.value = "";
-       setTimeout(function() { input.focus(); }, 10);
-     }
-   }
+  // Guardrail (ii): Live check for values over 22
+  function validateInput(input) {
+    var val = parseInt(input.value, 10);
+    if (!isNaN(val) && (val > 22 || val < 1)) {
+      alert("🚨 Invalid Position! Positions must be between 1 and 22.");
+      input.value = "";
+      setTimeout(function() { input.focus(); }, 10);
+    }
+  }
 
-   function checkDuplicate(input) {
-     var val = input.value;
-     if (!val) return;
-     var allInputs = document.querySelectorAll('.guess');
-     for (var j = 0; j < allInputs.length; j++) {
-       if (allInputs[j] !== input && allInputs[j].value === val) {
-         alert("⚠️ Position " + val + " is already assigned to another driver!");
-         input.value = "";
-         return;
-       }
-     }
-   }
+  function checkDuplicate(input) {
+    var val = input.value;
+    if (!val) return;
+    var allInputs = document.querySelectorAll('.guess');
+    for (var j = 0; j < allInputs.length; j++) {
+      if (allInputs[j] !== input && allInputs[j].value === val) {
+        alert("⚠️ Position " + val + " is already assigned to another driver!");
+        input.value = "";
+        return;
+      }
+    }
+  }
 
-   async function submitToLeaderboard() {
-     var nameInput = document.getElementById('player-name').value.trim();
-     var status = document.getElementById('status-msg');
-     if (!nameInput) { alert("Please enter your name!"); return; }
+  async function submitToLeaderboard() {
+    var nameInput = document.getElementById('player-name').value.trim();
+    var status = document.getElementById('status-msg');
+    if (!nameInput) { alert("Please enter your name!"); return; }
+    
+    var inputs = document.querySelectorAll('.guess');
+    var predictions = [];
+    var assignedPositions = [];
 
-     var inputs = document.querySelectorAll('.guess');
-     var predictions = [];
-     var assignedPositions = [];
+    // Scan absolutely everything submitted
+    for (var m = 0; m < inputs.length; m++) {
+      var currentVal = parseInt(inputs[m].value, 10);
+      
+      // Double check constraint (ii) at submission time
+      if (!isNaN(currentVal) && (currentVal > 22 || currentVal < 1)) {
+        alert("❌ Submission Blocked! Found an invalid position: " + currentVal);
+        inputs[m].value = "";
+        return;
+      }
+      
+      if (!isNaN(currentVal)) {
+        assignedPositions.push(currentVal);
+        predictions.push(inputs[m].getAttribute('data-name') + ":" + currentVal);
+      }
+    }
 
-     // Scan absolutely everything submitted
-     for (var m = 0; m < inputs.length; m++) {
-       var currentVal = parseInt(inputs[m].value, 10);
+    // Guardrail (i): Verify 1 through 22 all exist
+    var missingPositions = [];
+    for (var p = 1; p <= 22; p++) {
+      if (assignedPositions.indexOf(p) === -1) {
+        missingPositions.push(p);
+      }
+    }
 
-       // Double check constraint (ii) at submission time just in case
-       if (!isNaN(currentVal) && (currentVal > 22 || currentVal < 1)) {
-         alert("❌ Submission Blocked! Found an invalid position: " + currentVal);
-         inputs[m].value = "";
-         return;
-       }
+    if (missingPositions.length > 0) {
+      alert("❌ Submission Blocked!\n\nYou must assign ALL 22 places.\nMissing position numbers: " + missingPositions.join(", "));
+      return;
+    }
 
-       if (!isNaN(currentVal)) {
-         assignedPositions.push(currentVal);
-         predictions.push(inputs[m].getAttribute('data-name') + ":" + currentVal);
-       }
-     }
+    status.innerHTML = "🏎️ Speeding predictions to the scoreboard...";
+    try {
+      await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
+      status.innerHTML = "✅ SUBMITTED SUCCESSFULLY!";
+    } catch (err) { status.innerHTML = "❌ Engine Failure: " + err; }
+  }
 
-     // Guardrail (i): Build a math map to verify 1 through 22 all exist
-     var missingPositions = [];
-     for (var p = 1; p <= 22; p++) {
-       if (assignedPositions.indexOf(p) === -1) {
-         missingPositions.push(p);
-       }
-     }
-
-     if (missingPositions.length > 0) {
-       alert("❌ Submission Blocked!\n\nYou must assign ALL 22 places.\nMissing position numbers: " + missingPositions.join(", "));
-       return;
-     }
-
-     status.innerHTML = "🏎️ Speeding predictions to the scoreboard...";
-     try {
-       await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
-       status.innerHTML = "✅ SUBMITTED SUCCESSFULLY!";
-     } catch (err) { status.innerHTML = "❌ Engine Failure: " + err; }
-   }
-
-   function resetBoard() {
-     var inputs = document.querySelectorAll('.guess');
-     for (var l = 0; l < inputs.length; l++) { inputs[l].value = ""; }
-     document.getElementById('status-msg').innerHTML = "";
-   }
- 
- 
-
+  function resetBoard() {
+    var inputs = document.querySelectorAll('.guess');
+    for (var l = 0; l < inputs.length; l++) { inputs[l].value = ""; }
+    document.getElementById('status-msg').innerHTML = "";
+  }
+</script>
+</body>
+</html>
