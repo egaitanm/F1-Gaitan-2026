@@ -62,13 +62,13 @@
      grid.appendChild(card);
    }
 
-   // Guardrail (ii): Un-skippable check for values over 22
+   // Guardrail (ii): Live check for values over 22 as they type
    function validateInput(input) {
      var val = parseInt(input.value, 10);
      if (!isNaN(val) && (val > 22 || val < 1)) {
-       alert("🚨 Invalid Position! Positions must be between 1 and 22.");
+       alert("🚨 Invalid Position! You cannot choose a position higher than 22.");
        input.value = "";
-       setTimeout(function() { input.focus(); }, 10);
+       input.focus();
      }
    }
 
@@ -94,24 +94,17 @@
      var predictions = [];
      var assignedPositions = [];
 
-     // Scan absolutely everything submitted
-     for (var m = 0; m < inputs.length; m++) {
-       var currentVal = parseInt(inputs[m].value, 10);
-
-       // Double check constraint (ii) at submission time just in case
-       if (!isNaN(currentVal) && (currentVal > 22 || currentVal < 1)) {
-         alert("❌ Submission Blocked! Found an invalid position: " + currentVal);
-         inputs[m].value = "";
-         return;
+     // Collect all assigned data
+     inputs.forEach(function(input) {
+       var val = input.value;
+       if (val) {
+         var num = parseInt(val, 10);
+         assignedPositions.push(num);
+         predictions.push(input.getAttribute('data-name') + ":" + num);
        }
+     });
 
-       if (!isNaN(currentVal)) {
-         assignedPositions.push(currentVal);
-         predictions.push(inputs[m].getAttribute('data-name') + ":" + currentVal);
-       }
-     }
-
-     // Guardrail (i): Build a math map to verify 1 through 22 all exist
+     // Guardrail (i): Verify every position from 1 to 22 exists in the entry
      var missingPositions = [];
      for (var p = 1; p <= 22; p++) {
        if (assignedPositions.indexOf(p) === -1) {
@@ -120,7 +113,7 @@
      }
 
      if (missingPositions.length > 0) {
-       alert("❌ Submission Blocked!\n\nYou must assign ALL 22 places.\nMissing position numbers: " + missingPositions.join(", "));
+       alert("❌ Submission Blocked!\n\nYou must assign ALL 22 unique places.\nMissing position numbers: " + missingPositions.join(", "));
        return;
      }
 
@@ -128,6 +121,7 @@
      try {
        await fetch(WEB_APP_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ playerName: nameInput, predictions: predictions }) });
        status.innerHTML = "✅ SUBMITTED SUCCESSFULLY!";
+       status.style.color = "#2e7d32";
      } catch (err) { status.innerHTML = "❌ Engine Failure: " + err; }
    }
 
